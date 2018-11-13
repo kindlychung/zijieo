@@ -6,9 +6,9 @@ static const char USAGE[] =
     R"(Check endianness of your architecture.
 
     Usage:
-      check_endian (text|bool|int)
-      check_endian (-h | --help)
-      check_endian --version
+      zijieo (text|bool|int)
+      zijieo (-h | --help)
+      zijieo --version
 
     Options:
       -h --help     Show this screen.
@@ -21,8 +21,8 @@ static const char USAGE[] =
 )";
 
 int main(int argc, char** argv) {
-    std::map<std::string, docopt::value> args = docopt::docopt(
-        USAGE, {argv + 1, argv + argc}, true, "check_endian 1.0.0");
+    std::map<std::string, docopt::value> args =
+        docopt::docopt(USAGE, {argv + 1, argv + argc}, true, "zijieo 1.0.3");
     std::string result = "";
     bool is_big = sipmlendian::is_big();
     if (args["text"].asBool()) {

@@ -11,7 +11,7 @@ if not os.path.exists(conan_bin_dir):
 
 class ZijieoConan(ConanFile):
     name = "zijieo"
-    version = "1.0.1"
+    version = "1.0.3"
     license = "MIT"
     author = "kaiyin kindlychung@gmail.com"
     url = "https://github.com/kindlychung/zijieo"
