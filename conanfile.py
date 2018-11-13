@@ -1,4 +1,12 @@
-from conans import ConanFile, CMake, tools
+from conans import ConanFile, CMake
+from pathlib import Path
+import os
+
+homedir = Path.home()
+conan_dir = os.path.join(homedir, ".conan")
+conan_bin_dir = os.path.join(conan_dir, "bin")
+if not os.path.exists(conan_bin_dir):
+    os.mkdir(conan_bin_dir)
 
 
 class ZijieoConan(ConanFile):
@@ -7,41 +15,30 @@ class ZijieoConan(ConanFile):
     license = "MIT"
     author = "kaiyin kindlychung@gmail.com"
     url = "https://github.com/kindlychung/zijieo"
-    description = "<Description of Zijieo here>"
-    topics = ("<Put some tag here>", "<here>", "<and here>")
+    description = "Commandline tool for checking endianness"
+    topics = ("endianness", "cpp")
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
     default_options = "shared=False"
-    generators = "cmake"
-
-    def source(self):
-        self.run("git clone https://github.com/memsharded/hello.git")
-        self.run("cd hello && git checkout static_shared")
-        # This small hack might be useful to guarantee proper /MT /MD linkage
-        # in MSVC if the packaged project doesn't have variables to set it
-        # properly
-        tools.replace_in_file("hello/CMakeLists.txt", "PROJECT(MyHello)",
-                              '''PROJECT(MyHello)
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()''')
+    requires = "simplendian/1.0.0@jzien/dev", "docopt/0.6.2@conan/stable"
+    generators = "cmake", "gcc"
+    exports_sources = "src/*"
 
     def build(self):
         cmake = CMake(self)
-        cmake.configure(source_folder="hello")
+        cmake.configure(source_folder="src")
         cmake.build()
 
-        # Explicit way:
-        # self.run('cmake %s/hello %s'
-        #          % (self.source_folder, cmake.command_line))
-        # self.run("cmake --build . %s" % cmake.build_config)
+    def imports(self):
+        self.copy("*.h", dst="include")
+        self.copy("*.hpp", dst="include")
+        self.copy("*.dll", dst="bin", src="bin")
+        self.copy("*.dylib*", dst="bin", src="lib")
+        self.copy("*.a", dst="bin", src="lib")
+        self.copy("*.so", dst="bin", src="lib")
 
     def package(self):
-        self.copy("*.h", dst="include", src="hello")
-        self.copy("*hello.lib", dst="lib", keep_path=False)
-        self.copy("*.dll", dst="bin", keep_path=False)
-        self.copy("*.so", dst="lib", keep_path=False)
-        self.copy("*.dylib", dst="lib", keep_path=False)
-        self.copy("*.a", dst="lib", keep_path=False)
+        self.copy("*", dst="bin", src="bin")
 
-    def package_info(self):
-        self.cpp_info.libs = ["hello"]
+    def deploy(self):
+        self.copy("*", src="bin", dst=conan_bin_dir)
