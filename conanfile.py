@@ -11,7 +11,7 @@ if not os.path.exists(conan_bin_dir):
 
 class ZijieoConan(ConanFile):
     name = "zijieo"
-    version = "1.0.3"
+    version = "1.0.5"
     license = "MIT"
     author = "kaiyin kindlychung@gmail.com"
     url = "https://github.com/kindlychung/zijieo"
@@ -34,7 +34,7 @@ class ZijieoConan(ConanFile):
         self.copy("*.hpp", dst="include")
         self.copy("*.dll", dst="bin", src="bin")
         self.copy("*.dylib*", dst="bin", src="lib")
-        self.copy("*.a", dst="bin", src="lib")
+        self.copy("*.a", dst="lib", src="lib")
         self.copy("*.so", dst="bin", src="lib")
 
     def package(self):
