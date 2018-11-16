@@ -20,7 +20,7 @@ class ZijieoConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
     default_options = "shared=False"
-    requires = "simplendian/1.0.0@jzien/dev", "docopt/0.6.2@conan/stable"
+    requires = "simplendian/2.0.0@jzien/dev", "docopt/0.6.2@conan/stable"
     generators = "cmake", "gcc"
     exports_sources = "src/*"
 

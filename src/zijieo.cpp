@@ -1,6 +1,6 @@
 #include <docopt.h>
+#include <simplendian.h>
 #include <iostream>
-#include <simplendian.hpp>
 
 static const char USAGE[] =
     R"(Check endianness of your architecture.
